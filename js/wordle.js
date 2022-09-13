@@ -10,8 +10,9 @@ Keyboard.id = "keyboard";
 Keyboard.className = "containerKeyboard";
 ContainerGame.append(ContainerWord,Keyboard);
 
-// Creamos la palabra oculta
+// Creamos la palabra oculta y los intentos para adivinarla
 const wordToQuest = ["j","e","s","u","s"];
+let attempts = 0;
 const rows = [];
 for(let row = 0; row < 5; row++) {
     const ListWordHidden = document.createElement("ul");
@@ -33,7 +34,7 @@ const KeyboardLetters = [
     ["enter","z","x","c","v","b","n","m","delete"]
 ];
 const ListElements = [];
-const myAnswer = [];
+let myAnswer = [];
 let positions = [];
 
 // Creamos el keyaboard en la pantalla
@@ -65,6 +66,8 @@ const pressLetter = () => {
             break;
         default:
             if(myAnswer.length < wordToQuest.length) {
+                const currentItem = document.getElementById(`${attempts}-${myAnswer.length}`)
+                currentItem.textContent = button.id;
                 myAnswer.push(button.id);
             }
             break;
@@ -72,24 +75,34 @@ const pressLetter = () => {
 }
 // Comprobamos la palabra
 const checkWord = () => {
-    if(myAnswer.join("") === wordToQuest.join("")){
-        console.log("La palabra es correcta");
-    } else {
-        for( let i = 0; i < wordToQuest.length; i++ ) {
-            switch(true) {
-                case myAnswer[i] === wordToQuest[i]:
-                    positions.push("green");
-                    break;
-                case wordToQuest.includes(myAnswer[i]):
-                    positions.push("yellow");
-                    break;
-                default:
-                    positions.push("grey");
-            }
+    if(attempts < 5) {
+        attempts += 1;
+    }
+    for( let i = 0; i < wordToQuest.length; i++ ) {
+        switch(true) {
+            case myAnswer[i] === wordToQuest[i]:
+                positions.push("green");
+                break;
+            case wordToQuest.includes(myAnswer[i]):
+                positions.push("yellow");
+                break;
+            default:
+                positions.push("grey");
         }
     }
+    if(myAnswer.join("") === wordToQuest.join("")){
+        console.log("La palabra es correcta");
+    }
+    positions.map((color, id) => {
+        const item = document.getElementById(`${attempts - 1}-${id}`);
+        item.classList.add(color);
+    });
+    myAnswer = [];
+    positions = [];
 }
 // Borramos una letra
 const deleteLetter = () => {
     myAnswer.pop();
+    const deleteItem = document.getElementById(`${attempts}-${myAnswer.length}`)
+    deleteItem.textContent = "";
 }

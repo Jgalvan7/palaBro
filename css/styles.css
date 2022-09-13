@@ -720,6 +720,15 @@ a:hover {
   list-style: none;
 }
 .moduloGame .containerWordHidden .wordHiddenList__item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   max-width: 80px;
   min-width: 50px;
   height: 50px;
@@ -727,6 +736,15 @@ a:hover {
   border: 1px solid #ebebeb;
   border-radius: 5px;
   color: #ebebeb;
+}
+.moduloGame .green {
+  background-color: green;
+}
+.moduloGame .yellow {
+  background-color: yellow;
+}
+.moduloGame .grey {
+  background-color: gray;
 }
 .moduloGame .containerKeyboard {
   display: -webkit-box;

@@ -735,13 +735,14 @@ a:hover {
   margin: 0 5px;
   border: 1px solid #ebebeb;
   border-radius: 5px;
+  font-weight: bold;
   color: #ebebeb;
 }
 .moduloGame .green {
   background-color: green;
 }
 .moduloGame .yellow {
-  background-color: yellow;
+  background-color: #FFB200;
 }
 .moduloGame .grey {
   background-color: gray;
@@ -786,11 +787,10 @@ a:hover {
   height: 45px;
   border: 1px solid;
   border-radius: 5px;
+  font-weight: bold;
   color: #ebebeb;
   background: transparent;
 }
 .moduloGame .containerKeyboard .buttonKeyboard:hover {
-  color: #000000;
-  background-color: #ebebeb;
-  opacity: 0.6;
+  background-color: rgba(255, 255, 255, 0.603);
 }

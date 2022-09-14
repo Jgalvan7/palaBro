@@ -83,6 +83,7 @@
                 margin: 0 5px;
                 border: 1px solid $color-claro;
                 border-radius: 5px;
+                font-weight: bold;
                 color: $color-claro;
             }
         }
@@ -91,7 +92,7 @@
         background-color: green;
     }
     .yellow {
-        background-color: yellow;
+        background-color: #FFB200;
     }
     .grey {
         background-color: gray;
@@ -124,12 +125,11 @@
             height: 45px;
             border: 1px solid;
             border-radius: 5px;
+            font-weight: bold;
             color: $color-claro;
             background: transparent;
             &:hover {
-                color: $color-oscuro;
-                background-color: $color-claro;
-                opacity: 0.6;
+                background-color: rgba(255, 255, 255, 0.603);
             }
         }
     }

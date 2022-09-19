@@ -1,4 +1,12 @@
-// Accedemos al contenedor donded crearemos el juego
+// Titulo del juego
+const ContainerTitle = document.querySelector("#containerTitle");
+const TitleGame = document.createElement("img");
+TitleGame.id = "titleGame";
+TitleGame.className = "titleGame";
+TitleGame.src = "../assets/images/palabro_simple.png";
+ContainerTitle.appendChild(TitleGame);
+
+// Accedemos al contenedor donde crearemos el juego
 const ContainerGame = document.getElementById("game");
 
 // Creamos las etiquetas HTML que necesitaremos para desarrollar el juego
@@ -10,17 +18,44 @@ Keyboard.id = "keyboard";
 Keyboard.className = "containerKeyboard";
 const ContainerMenu = document.createElement("span");
 ContainerMenu.id = "modal";
-ContainerMenu.className = "modalMenu";
-ContainerGame.append(ContainerWord,Keyboard);
+ContainerMenu.className = "modalMenu hidden";
+const menu = document.createElement("section");
+menu.id = "menu";
+menu.classList = "menu";
+const ContainerMenuWord = document.createElement("article");
+ContainerMenuWord.id = "ContainerMenuWord";
+ContainerMenuWord.className = "ContainerMenuWord hidden";
+const ContainerText = document.createElement("article");
+ContainerText.className = "menu__text";
+const ContainerBtn = document.createElement("article");
+ContainerBtn.className = "menu__btn";
+const BtnNewGame = document.createElement("button");
+BtnNewGame.id = "btnNewGame";
+BtnNewGame.className = "menu__btn--new";
+BtnNewGame.textContent = "Nuevo juego";
+BtnNewGame.onclick = () => {
+    location.reload();
+};
+const BtnExitGame = document.createElement("button");
+BtnExitGame.id = "btnExitGame";
+BtnExitGame.className = "menu__btn--exit";
+BtnExitGame.textContent = "Salir";
+BtnExitGame.onclick = () => {
+    location.href="./index.html";
+};
+ContainerBtn.append(BtnNewGame,BtnExitGame);
+ContainerMenu.appendChild(menu);
+ContainerGame.append(ContainerWord,Keyboard,ContainerMenu);
 
 // Creamos la palabra oculta y los intentos para adivinarla
 const WordBase = [
-    ["pato","rana","papa","mama","loro","vaca","azul","rosa","rojo","mono","mesa","leer"],
-    ["raton","prima","planta","arbol","lapiz","avion","cebra","mosca","negro","verde","letra","libro","reloj","coche","viaje","jugar","jesus"],
-    ["abuelo","abuela","thiago","blanco","letras","viajar","correr","futbol","juegos","pintar","cantar","bailar","reirse","musica"]
+    ["pato","rana","loro","vaca","mono","raton","cebra","mosca","oso","abeja","perro","gato","cerdo","zorro"],
+    ["azul","rosa","rojo","negro","verde","gris","blanco"],
+    ["papa","mama","prima","primo","tito","abuelo","abuela"],
+    ["arbol","lapiz","avion","letra","libro","reloj","coche","viaje","jugar","mesa","leer","letras","viajar","correr","futbol","juegos","pintar","cantar","bailar","reirse","musica","planta"]
 ];
 const newWord = () => {
-    let base1 = aleatorio(1,3);
+    let base1 = aleatorio(1,4);
     let dimensionOne = base1 - 1;
     let max = WordBase[dimensionOne].length;
     let base2 = aleatorio(1,max);
@@ -109,7 +144,7 @@ const checkWord = () => {
                     positionLetter = wordToQuest[position];
                     if(positionLetter === myAnswer[i]){
                         let colorPosition = wordToQuest.indexOf(positionLetter,position);
-                        if(positions[colorPosition] != "green") {
+                        if(positions[colorPosition] != "green" && positions[colorPosition] != "yellow") {
                             positions.push("yellow");
                         } else {
                             let countLetter = wordToQuest.reduce((count,item) => {
@@ -132,13 +167,18 @@ const checkWord = () => {
                 break;
         }
     }
-    if(myAnswer.join("") === wordToQuest.join("")){
-        console.log("La palabra es correcta");
-    }
     positions.map((color, id) => {
         const item = document.getElementById(`${attempts - 1}-${id}`);
         item.classList.add(color);
     });
+    if(myAnswer.join("") === wordToQuest.join("")){
+        //const Palabro = myAnswer.join("");
+        winGame();
+        return;
+    }
+    if(attempts === 5) {
+        lostGame();
+    }
     myAnswer = [];
     positions = [];
 }
@@ -147,6 +187,43 @@ const deleteLetter = () => {
     myAnswer.pop();
     const deleteItem = document.getElementById(`${attempts}-${myAnswer.length}`)
     deleteItem.textContent = "";
+}
+
+// Creamos el menú para cuando finalizamos el juego
+function winGame() {
+
+    ContainerMenu.classList.remove("hidden");
+    ContainerMenuWord.classList.remove("hidden");
+    menu.append(ContainerMenuWord,ContainerText,ContainerBtn);
+    const ListWord = document.createElement("ul");
+    ListWord.className = "winnerWord";
+    for(letter of myAnswer) {
+        const ListWordItem = document.createElement("li");
+        ListWordItem.className = "winnerWord__item green";
+        ListWordItem.textContent = letter;
+        ListWord.appendChild(ListWordItem);
+    }
+    ContainerMenuWord.append(ListWord);
+    const TextWin = document.createElement("p");
+    TextWin.textContent = `Enorabuena, has acertado la palabra en ${attempts} intento/s.`;
+    ContainerText.append(TextWin);
+}
+function lostGame() {
+    ContainerMenu.classList.remove("hidden");
+    ContainerMenuWord.classList.remove("hidden");
+    menu.append(ContainerMenuWord,ContainerText,ContainerBtn);
+    const ListWord = document.createElement("ul");
+    ListWord.className = "winnerWord";
+    for(letter of wordToQuest) {
+        const ListWordItem = document.createElement("li");
+        ListWordItem.className = "winnerWord__item grey";
+        ListWordItem.textContent = letter;
+        ListWord.appendChild(ListWordItem);
+    }
+    ContainerMenuWord.append(ListWord);
+    const TextlostGame = document.createElement("p");
+    TextlostGame.textContent = "Esta era la palabra correcta. Lo siento no te quedan mas intentos.";
+    ContainerText.append(TextlostGame);
 }
 
 function aleatorio(min, max) {

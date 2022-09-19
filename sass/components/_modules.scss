@@ -64,10 +64,9 @@
 }
 .moduloGame {
     .containerWordHidden {
-        min-width: 310px;
+        min-width: 305px;
         max-width: 600px;
         margin: 0 auto;
-        padding: 5px;
         .wordHiddenList {
             display: flex;
             justify-content: center;
@@ -78,7 +77,7 @@
                 justify-content: center;
                 align-items: center;
                 max-width: 80px;
-                min-width: 50px;
+                min-width: 40px;
                 height: 50px;
                 margin: 0 5px;
                 border: 1px solid $color-claro;
@@ -101,10 +100,9 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        min-width: 310px;
+        min-width: 305px;
         max-width: 600px;
         margin: 0 auto;
-        padding: 5px;
         .listLetters {
             display: flex;
             justify-content: center;
@@ -116,7 +114,6 @@
             list-style: none;
             &__item {
                 width: 100%;
-                margin: 0 2px;
             }
         }
         .buttonKeyboard {
@@ -125,11 +122,47 @@
             height: 45px;
             border: 1px solid;
             border-radius: 5px;
+            @include font-size(12px);
             font-weight: bold;
             color: $color-claro;
             background: transparent;
             &:hover {
                 background-color: rgba(255, 255, 255, 0.603);
+            }
+        }
+        @include media(tablet) {
+            padding: 5px;
+            .listLetters {
+                &__item {
+                    margin: 0 2px;
+                }
+            }
+            .buttonKeyboard {
+                @include font-size(16px);
+            }
+        }
+    }
+    .ContainerMenuWord {
+        min-width: 260px;
+        max-width: 600px;
+        margin: 0 auto;
+        .winnerWord {
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            list-style: none;
+            &__item {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                max-width: 80px;
+                min-width: 40px;
+                height: 50px;
+                margin: 0;
+                border: 1px solid $color-claro;
+                border-radius: 5px;
+                font-weight: bold;
+                color: $color-claro;
             }
         }
     }

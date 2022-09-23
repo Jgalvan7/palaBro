@@ -92,6 +92,8 @@ const KeyboardLetters = [
 const ListElements = [];
 let myAnswer = [];
 let positions = [];
+let colorCheck = [];
+let colorLetter = [];
 
 // Creamos el keyaboard en la pantalla
 KeyboardLetters.map((letters) => {
@@ -131,57 +133,92 @@ const pressLetter = () => {
 }
 // Comprobamos la palabra
 const checkWord = () => {
+    // Rellenamos el array de colorCheck para comprobar si la letra ya fue chequeada y el array de color Letter para pintar las letras tras la comprobación
+    for(p in wordToQuest) {
+        colorCheck.push("grey");
+        colorLetter.push("grey");
+    }
+    // Creamos un array para saber la cantidad que hay de cada letra en la palabra secreta
+    let countLetterQuest = wordToQuest.reduce((count,item) => {
+        if(!count[item]) {
+            count[item] = 1;
+        } else {
+            count[item]++;
+        }
+        return count;
+    },[]);
+    // Creamos un array para saber la cantidad que hay de cada letra en la palabra introducida
+    let countLetterAnswer = myAnswer.reduce((count,item) => {
+        if(!count[item]) {
+            count[item] = 1;
+        } else {
+            count[item]++;
+        }
+        return count;
+    },[]);
+    // Establecemos el número de intentos que llevamos
     if(attempts < 5) {
         attempts += 1;
     }
+    //Recorremos la palabra secreta con un ciclo for para ir comprobando las letras y saber de que color debemos pintarlas
     for( let i = 0; i < wordToQuest.length; i++ ) {
         switch(true) {
+            // Caso de que la letra esta en la posición correcta
             case myAnswer[i] === wordToQuest[i]:
-                positions.push("green");
+                colorLetter[i] = "green";
+                colorCheck[i] = "green";
                 break;
+            // Caso en que la letra existe en la palabra secreta pero no está en la posisción correcta
             case wordToQuest.includes(myAnswer[i]):
+                // Averiguamos la posicion de la letra introducida en la palabra secreta, para lo que creamos un array donde guardaremos las posiciones donde la letra introduicida coindide cin una letra de la palabra secreta
+                let positionLetter = [];
                 for(position in wordToQuest) {
-                    positionLetter = wordToQuest[position];
-                    if(positionLetter === myAnswer[i]){
-                        let colorPosition = wordToQuest.indexOf(positionLetter,position);
-                        if(positions[colorPosition] != "green" && positions[colorPosition] != "yellow") {
-                            positions.push("yellow");
-                        } else {
-                            let countLetter = wordToQuest.reduce((count,item) => {
-                                if(!count[item]) {
-                                    count[item] = 1;
-                                } else {
-                                    count[item]++;
+                    let letterAdd = wordToQuest[position];
+                    if(letterAdd === myAnswer[i] ) {
+                        positionLetter.push(position);
+                    }
+                }
+                // Recorremos el aray para saber de que color debemos pintar la letra
+                for(p of positionLetter) {
+                    // Primero confirmamos que en la posicion correcta de la letra efectivamente no coincidirá
+                    if(myAnswer[p] != wordToQuest[p]) {
+                        // Comprobamos que en el array de colores esa pposicion aún no ha sido comprobada
+                        if(colorCheck[p] == "grey") {
+                            if(countLetterAnswer[myAnswer[i]] != 0 && countLetterQuest[myAnswer[i]] != 0) {
+                                countLetterAnswer[myAnswer[i]]--;
+                                if(countLetterQuest[myAnswer[i]] >= 1) {
+                                    colorCheck[p] = "yellow";
+                                    colorLetter[i] = "yellow";
+                                    countLetterQuest[myAnswer[i]]--;
+                                    positionLetter.pop();
                                 }
-                                return count;
-                            },{});
-                            if(countLetter[myAnswer[i]] === 1){
-                                positions.push("grey");
                             }
                         }
                     }
                 }
                 break;
-            default:
-                positions.push("grey");
-                break;
         }
     }
-    positions.map((color, id) => {
+    // Damos color a las letras tras su comprobación
+    colorLetter.map((color, id) => {
         const item = document.getElementById(`${attempts - 1}-${id}`);
         item.classList.add(color);
     });
+    // Comprobamos si las palabras coinciden, sies asi llamamos a la funcion win
     if(myAnswer.join("") === wordToQuest.join("")){
-        //const Palabro = myAnswer.join("");
         winGame();
         return;
     }
-    if(attempts === 5) {
+    // Comprobamos cuantos intentos lleva para saber si puede seguir jugan o ya no le quedan intentos y a perdido el juego
+    if(attempts === 6) {
         lostGame();
     }
+    // Borramos los arrays para la proxima vez que comprobemos la palabra
     myAnswer = [];
-    positions = [];
+    colorCheck = [];
+    colorLetter = [];
 }
+
 // Borramos una letra
 const deleteLetter = () => {
     myAnswer.pop();
@@ -191,7 +228,6 @@ const deleteLetter = () => {
 
 // Creamos el menú para cuando finalizamos el juego
 function winGame() {
-
     ContainerMenu.classList.remove("hidden");
     ContainerMenuWord.classList.remove("hidden");
     menu.append(ContainerMenuWord,ContainerText,ContainerBtn);
@@ -205,7 +241,7 @@ function winGame() {
     }
     ContainerMenuWord.append(ListWord);
     const TextWin = document.createElement("p");
-    TextWin.textContent = `Enorabuena, has acertado la palabra en ${attempts} intento/s.`;
+    TextWin.textContent = `Enhorabuena, has acertado la palabra en ${attempts} intento/s.`;
     ContainerText.append(TextWin);
 }
 function lostGame() {

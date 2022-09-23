@@ -87,7 +87,7 @@ ContainerWord.append(...rows);
 const KeyboardLetters = [
     ["q","w","e","r","t","y","u","i","o","p"],
     ["a","s","d","f","g","h","j","k","l"],
-    ["enter","z","x","c","v","b","n","m","delete"]
+    ["delete","z","x","c","v","b","n","m","enter"]
 ];
 const ListElements = [];
 let myAnswer = [];

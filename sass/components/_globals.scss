@@ -128,13 +128,12 @@ a:hover {
             border-radius: 5px;
             color: $color-claro;
             font-weight: bold;
-            
             #btnExitGame {
                 background-color: red;
             }
         }
         &--new {
-            background-color: green;
+            background-color: blue;
         }
         &--exit {
             background-color: red;
